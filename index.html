@@ -1,0 +1,107 @@
+<html>
+
+<body>
+    <h2> Create a text file and save it to a local computer using JavaScript. </h2>
+    <p> Enter the file content:- </p>
+    <textarea> </textarea>
+    <br />
+    <button onclick="downloadFile()"> save File </button>
+
+    <br><br><br>
+
+    <button onclick='createFile()'>Create</button>
+
+    <br>
+    <br>
+    <br>
+
+    <button onclick="makeDocument()">mk document</button>
+
+    <br>
+    <br>
+    <br>
+
+    <form role="form">
+        <h3>Saving a file with pure JS!</h3>
+        <p>Uses HTML5 W3C saveAs() function and the <a href="https://github.com/eligrey/FileSaver.js"
+                target="_blank">FileSaver.js</a> polyfill for this.<br>
+            I didn't think this was even possible without a server but the docs say it should work in IE 10+, Sweet!</p>
+        <div class="form-group">
+            <label for="input-fileName">File name</label>
+            <input type="text" class="form-control" id="input-fileName" value="textFile" placeholder="Enter file name">
+        </div>
+        <div class="form-group">
+            <label for="textarea">Text</label>
+            <textarea id="textarea" class="form-control" rows="10"
+                placeholder="Enter text to save">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae iure ab voluptate sunt reiciendis, officia, aliquam temporibus. Quo laudantium quaerat ad, deleniti optio ex, dignissimos, ea accusamus placeat tempora minima!</textarea>
+        </div>
+        <button id="btn-save" type="submit" class="btn btn-primary">Save to file</button>
+    </form>
+
+    <script>
+        const downloadFile = () => {
+            const link = document.createElement("a");
+            const content = document.querySelector("textarea").value;
+            const file = new Blob([content], { type: 'text/plain' });
+            link.href = URL.createObjectURL(file);
+            link.download = "sample.txt";
+            link.click();
+            URL.revokeObjectURL(link.href);
+        };
+    </script>
+
+
+
+    <script>
+        function createFile() {
+            //create or obtain the file's content
+            var content = 'This is a text';
+
+            //create a file and put the content, name and type
+            var file = new File(["\ufeff" + content], 'myFile.txt', { type: "text/plain:charset=UTF-8" });
+
+            //create a ObjectURL in order to download the created file
+            url = window.URL.createObjectURL(file);
+
+            //create a hidden link and set the href and click it
+            var a = document.createElement("a");
+            a.style = "display: none";
+            a.href = url;
+            a.download = file.name;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        } 
+    </script>
+
+    <script>
+        function makeDocument() {
+
+            var doc = document.implementation.createHTMLDocument("newdoc");
+            var p = doc.createElement("p");
+            p.innerHTML = "This is a new paragraph.";
+
+            try {
+                doc.body.appendChild(p);
+            } catch (e) {
+                console.log(e);
+            }
+
+            var opened = window.open("");
+            opened.document.write(doc);
+        }
+
+    </script>
+
+    <script>
+        $("#btn-save").click(function () {
+            event.preventDefault();
+            var text = $("#textarea").val();
+            var filename = $("#input-fileName").val()
+            var blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+            saveAs(blob, filename + ".txt");
+        });
+    </script>
+
+</body>
+
+</html>
